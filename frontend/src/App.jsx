@@ -5,15 +5,20 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import AuthProvider, { AuthContext } from "./context/AuthContext";
 import Product from "./pages/Product";
+import AddProduct from "./pages/AddProduct";
+import AdminRoute from "./routes/AdminRoute";
+import Footer from "./components/Footer";
 
 function AppRoutes() {
     const { user } = useContext(AuthContext); // ✅ Now this is inside AuthProvider
+
     return (
         <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/:id" element={<Product />} />
+            <Route path="/addproduct" element={<AdminRoute user={user}><AddProduct /></AdminRoute>} />
         </Routes>
     );
 }
@@ -23,7 +28,10 @@ export default function App() {
         <div className="min-h-screen bg-gray-900 text-white">
             <AuthProvider>
                 <BrowserRouter>
-                    <AppRoutes /> {/* ✅ Now this has access to context */}
+                    <div className="flex-grow">
+                        <AppRoutes />
+                    </div> {/* ✅ Now this has access to context */}
+                    <Footer />
                 </BrowserRouter>
             </AuthProvider>
         </div>

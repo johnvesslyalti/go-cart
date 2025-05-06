@@ -11,7 +11,11 @@ export default function Navbar() {
 
     return(
         <div className="flex justify-between items-center">
-            <h1 className="text-3xl font-bold text-green-500">Go Cart</h1>
+            {user?.role === 'admin' ? (
+                <h1 className="text-3xl font-bold pl-10 text-green-500">Admin</h1>
+            ) : (
+                <h1 className="text-3xl font-bold text-green-500">Go Cart</h1>
+            )}
             <div className="flex w-sm rounded-md overflow-hidden">
             <input 
                 type="text"
@@ -30,8 +34,11 @@ export default function Navbar() {
                     <button className="hover:text-green-500 cursor-pointer">Cart</button>
                     <button className="hover:text-red-500 cursor-pointer" onClick={handleLogout}>Logout</button>
                 </div>
-                ) : <div className="flex gap-10">
-                <button className="hover:text-green-500 cursor-pointer">Add Product</button>
+                ) : <div className="flex gap-5">
+                <Link to="/addproduct">
+                    <button className="hover:text-green-500 cursor-pointer">Add Product</button>
+                </Link>
+                <button className="hover:text-green-500 cursor-pointer">View Users</button>
                 <button className="hover:text-red-500 cursor-pointer" onClick={handleLogout}>Logout</button>
             </div>
             ) : (
