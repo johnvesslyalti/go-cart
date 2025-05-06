@@ -3,7 +3,11 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 
 export default function Navbar() {
-    const { user } = useContext(AuthContext);
+    const { user, logout } = useContext(AuthContext);
+
+    const handleLogout = () => {
+        logout();
+    }
 
     return(
         <div className="flex justify-between items-center">
@@ -20,11 +24,16 @@ export default function Navbar() {
             </div>
 
             {user ? (
-                <div className="flex gap-5">
-                    <button>Orders</button>
-                    <button>Cart</button>
-                    <button>Logout</button>
+                 user.role === 'user' ? (
+                    <div className="flex gap-5">
+                    <button className="hover:text-green-500 cursor-pointer">Orders</button>
+                    <button className="hover:text-green-500 cursor-pointer">Cart</button>
+                    <button className="hover:text-red-500 cursor-pointer" onClick={handleLogout}>Logout</button>
                 </div>
+                ) : <div className="flex gap-10">
+                <button className="hover:text-green-500 cursor-pointer">Add Product</button>
+                <button className="hover:text-red-500 cursor-pointer" onClick={handleLogout}>Logout</button>
+            </div>
             ) : (
                 <ul className="flex gap-10">
                     <Link to="/login">

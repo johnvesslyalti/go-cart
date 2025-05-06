@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import api from "../utils/api";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext"; // Ensure it's the default import
+import { IoMdArrowRoundBack } from "react-icons/io";
 
 export default function Login() {
     const [email, setEmail] = useState('');
@@ -24,9 +25,15 @@ export default function Login() {
             setEmail('');
             setPassword('');
             setSuccess(true);
-            setTimeout(() => {
-                navigate('/'); // Redirect after successful login
-            }, 3000);
+            if(response.data.role === "admin") {
+                setTimeout(() => {
+                    navigate('/');
+                }, 3000);
+            } else {
+                setTimeout(() => {
+                    navigate('/'); // Redirect after successful login
+                }, 3000);
+            }
         } catch (error) {
             setError("Login failed. Please check your credentials."); // Show error message
             console.error(error);
@@ -43,6 +50,7 @@ export default function Login() {
             {error && (
                 <div className="absolute top-10 bg-red-500 px-2 py-3 animate-bounce">{error}</div> // Display error message
             )}
+            <div onClick={() => navigate("/")} className="absolute flex justify-center items-center cursor-pointer group gap-2 text-lg top-5 left-5"><IoMdArrowRoundBack className="group-hover:text-green-500" /><p className="group-hover:text-green-500">Back</p></div>
             <form onSubmit={handleSubmit} className="w-full max-w-sm flex flex-col gap-5 p-6 bg-gray-800 rounded-xl shadow-xl">
                 <h1 className="text-3xl text-green-400 font-bold text-center">Login</h1>
 

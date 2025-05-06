@@ -35,7 +35,7 @@ export default function Register() {
             {success && (
                 <button className="absolute top-10 bg-green-500 px-2 py-3 animate-bounce">Registration Successful</button>
             )}
-            <div className="absolute flex justify-center items-center cursor-pointer group gap-2 text-lg top-5 left-5"><IoMdArrowRoundBack className="group-hover:text-green-500" /><p className="group-hover:text-green-500">Back</p></div>
+            <div onClick={() => navigate("/")} className="absolute flex justify-center items-center cursor-pointer group gap-2 text-lg top-5 left-5"><IoMdArrowRoundBack className="group-hover:text-green-500" /><p className="group-hover:text-green-500">Back</p></div>
             <form onSubmit={handleSubmit} className="w-full max-w-sm flex flex-col gap-5 p-6 bg-gray-800 rounded-xl shadow-xl">
                 <h1 className="text-3xl text-green-400 font-bold text-center">Register</h1>
 
