@@ -37,7 +37,7 @@ export default function Home() {
         {products.map((product) => (
           <div
           key={product._id}
-          className="p-5 bg-gray-700 rounded-2xl flex flex-col justify-between h-[400px]"
+          className="p-5 bg-gray-700 rounded-2xl flex flex-col justify-between h-[400px] hover:scale-101"
         >
           <Link to={`/${product._id}`} className="flex-grow">
             <div className="h-48 overflow-hidden rounded-xl">
