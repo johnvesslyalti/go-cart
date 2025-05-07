@@ -53,8 +53,8 @@ export default function Home() {
   return (
     <div className="p-5">
       <Navbar />
-      <Message showMessage={cartMessage} setShowMessage={setCartMessage} message={"Please login to add items to cart!"} func={() => navigate('/login')} btn={"Login"}/>
-      <div className="grid grid-cols-5 gap-5 py-10">
+        <Message showMessage={cartMessage} setShowMessage={setCartMessage} message={"Please login to add items to cart!"} func={() => navigate('/login')} btn={"Login"}/>
+        <div className="grid grid-cols-5 gap-5 py-10">
         {products.map((product) => (
           <div
           key={product._id}
@@ -101,7 +101,7 @@ export default function Home() {
           ) : null}
         </div>        
         ))}
+        </div>
       </div>
-    </div>
   );
 }

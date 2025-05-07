@@ -1,26 +1,29 @@
 import { useContext, useEffect, useState } from "react";
 import api from "../utils/api";
 import { AuthContext } from "../context/AuthContext";
+import Navbar from "../components/Navbar";
 
 export default function Cart() {
-    const [cart, setCart] = useState(null);
-    const [loading, setLoading] = useState(true); // ✅ You were using setLoading but didn't define it
-    const { token } = useContext(AuthContext);
+const [cart, setCart] = useState(null);
+const [loading, setLoading] = useState(true); 
+const { token } = useContext(AuthContext);
 
-    const fetchCart = async () => {
-        try {
-            const res = await api.get('/cart', {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            setCart(res.data);
-        } catch (error) {
-            console.error("Error fetching cart:", error);
-        } finally {
-            setLoading(false);
+const fetchCart = async () => {
+    try {
+    const res = await api.get('/cart', {
+        headers: {
+            Authorization: `Bearer ${token}`
         }
-    };
+    });
+    
+    setCart(res.data);
+
+    } catch (error) {
+        console.error("Error fetching cart:", error);
+    } finally {
+    setLoading(false);
+    }
+};
 
     useEffect(() => {
         fetchCart();
@@ -29,16 +32,28 @@ export default function Cart() {
     if (loading) return <p className="p-5">Loading cart...</p>;
     if (!cart || cart.items.length === 0) return <p className="p-5">Your cart is empty.</p>;
 
-    return (
-        <div className="min-h-screen p-5">
-            <h1 className="text-2xl font-bold mb-4">Your Cart</h1>
+return (
+    <div className="min-h-screen p-5">
+        <Navbar />
+        <div className="grid grid-cols-5 gap-5 py-10">
             {cart.items.map((item) => (
-                <div key={item.productId._id || item.productId} className="border p-4 mb-3 rounded">
-                    <h2>Product ID: {item.productId.name || item.productId}</h2>
-                    <p>Quantity: {item.quantity}</p>
-                    <p>Price: ₹{item.price}</p>
+                <div key={item.productId} className="p-5 bg-gray-700 rounded-2xl flex flex-col justify-between h-[300px] hover:scale-101">
+                    <div className="h-48 overflow-hidden rounded-xl">
+                        <img
+                        src={item.productId.image}
+                        alt={item.productId.name}
+                        className="w-full h-full object-contain"
+                        />
+                    </div>
+                    <div className="mt-5 flex flex-col flex-grow">
+                        <p className="font-bold text-xl line-clamp-2 break-words">
+                        {item.productId.name}
+                        </p>
+                        <p className="text-green-200 mt-1">${item.productId.price}</p>
+                    </div>
                 </div>
             ))}
         </div>
-    );
+    </div>
+)
 }
