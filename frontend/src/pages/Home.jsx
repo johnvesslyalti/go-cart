@@ -2,11 +2,14 @@ import { useContext, useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import api from "../utils/api";
 import { AuthContext } from "../context/AuthContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Message from "../components/Message";
 
 export default function Home() {
   const [products, setProducts] = useState([]);
   const { user, token } = useContext(AuthContext);
+  const [cartMessage, setCartMessage] = useState(false);
+  const navigate = useNavigate();
 
   const fetchProducts = async () => {
     const response = await api.get("/products");
@@ -16,6 +19,23 @@ export default function Home() {
   useEffect(() => {
     fetchProducts();
   }, []);
+
+  const addToCart = async (product) => {
+    try {
+      if(user) {
+        const response = await api.post('/cart', {productId: product._id}, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          }
+        })
+      } else {
+        setCartMessage(true);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   const deleteProduct = async (id) => {
     try {
@@ -33,6 +53,7 @@ export default function Home() {
   return (
     <div className="p-5">
       <Navbar />
+      <Message showMessage={cartMessage} setShowMessage={setCartMessage} message={"Please login to add items to cart!"} func={() => navigate('/login')} btn={"Login"}/>
       <div className="grid grid-cols-5 gap-5 py-10">
         {products.map((product) => (
           <div
@@ -58,10 +79,10 @@ export default function Home() {
           {/* Buttons always stick to the bottom */}
           {user?.role === "user" || !user ? (
             <div className="flex justify-between items-center gap-2 mt-3">
-              <button className="bg-green-500 px-3 py-2 rounded-xl text-sm">
+              <button onClick={() => addToCart(product)} className="bg-green-500 px-3 py-2 rounded-xl text-sm cursor-pointer">
                 Add to cart
               </button>
-              <button className="bg-green-600 px-3 py-2 rounded-xl text-sm">
+              <button className="bg-green-600 px-3 py-2 rounded-xl text-sm cursor-pointer">
                 Buy now
               </button>
             </div>

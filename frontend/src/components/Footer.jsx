@@ -1,4 +1,13 @@
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+
 export default function Footer() {
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const goto = (path) => navigate(path);
+
     return (
       <footer className="bg-gray-800 text-white py-10 mt-10">
         <div className="max-w-7xl mx-auto px-5 grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -10,17 +19,31 @@ export default function Footer() {
               Your go-to destination for everything you love. Fast, simple, and secure shopping.
             </p>
           </div>
-  
-          {/* Navigation
+
           <div>
             <h3 className="text-lg font-semibold mb-2">Quick Links</h3>
-            <ul className="space-y-2 text-gray-300">
-              <li><a href="/" className="hover:text-white">Home</a></li>
-              <li><a href="/login" className="hover:text-white">Login</a></li>
-              <li><a href="/register" className="hover:text-white">Register</a></li>
-              <li><a href="/addproduct" className="hover:text-white">Add Product</a></li>
-            </ul>
-          </div> */}
+            <div className="space-y-2 text-gray-300">
+            { user?.role === "user" ? (
+              <>
+                <button onClick={() => goto("/")} className="cursor-pointer">Home</button><br />
+                <button onClick={() => goto("/orders")} className="cursor-pointer">Orders</button><br />
+                <button onClick={() => goto("/cart")} className="cursor-pointer">Cart</button>
+              </>
+            ) : user?.role === 'admin' ? (
+              <>
+                <button onClick={() => goto("/")} className="cursor-pointer">Home</button><br />
+                <button onClick={() => goto("/addproduct")} className="cursor-pointer">Add Products</button><br />
+                <button onClick={() => goto("/viewusers")} className="cursor-pointer">View Users</button>
+              </>
+            ) : (
+              <>
+                <button onClick={() => goto("/")} className="cursor-pointer">Home</button><br />
+                <button onClick={() => goto("/register")} className="cursor-pointer">Register</button><br />
+                <button onClick={() => goto("/login")} className="cursor-pointer">Login</button>
+              </>
+            )}
+             </div>
+          </div>
   
           {/* Contact */}
           <div>

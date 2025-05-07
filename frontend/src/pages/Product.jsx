@@ -37,8 +37,6 @@ export default function Product() {
                 <h2 className="text-3xl font-bold">{product.name}</h2>
                 <p className="text-gray-500">{product.description}</p>
                 <p className="text-xl font-semibold text-green-600">Price: ${product.price}</p>
-                <p className="text-xl">Category: {product.category}</p>
-                <p className="text-md">Stock: {product.stock}</p>
                 <div className="flex items-center gap-2 mt-3">
                     <button className="bg-green-500 px-3 py-2 rounded-xl text-sm cursor-pointer">Add to cart</button>
                     <button className="bg-green-600 px-3 py-2 rounded-xl text-sm cursor-pointer">Buy now</button>

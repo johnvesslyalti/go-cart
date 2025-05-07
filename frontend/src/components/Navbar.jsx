@@ -1,6 +1,7 @@
 import { useContext, useState } from "react"
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import Message from "./Message";
 
 export default function Navbar() {
     const { user, logout } = useContext(AuthContext);
@@ -56,7 +57,8 @@ export default function Navbar() {
                 )}
             </div>
 
-            {showModal && (
+            <Message showMessage={showModal} setShowMessage={setShowModal} message={"Do you really want to logout?"} func={handleLogout} btn={"logout"}/>
+            {/* {showModal && (
                 <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50">
                     <div className="bg-gray-500 rounded-xl shadow-lg p-6 w-[300px] space y-4">
                         <h2 className="text-2xl text-center font-bold mb-5">Confirm Logout?</h2>
@@ -67,7 +69,7 @@ export default function Navbar() {
                         </div>
                     </div>
                 </div>
-            )}
+            )} */}
         </>
     )
 }
