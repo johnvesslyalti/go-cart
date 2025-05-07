@@ -4,7 +4,6 @@ import { AuthContext } from "../context/AuthContext";
 import Message from "./Message";
 import { CiDeliveryTruck, CiLogin, CiLogout, CiShoppingCart } from "react-icons/ci";
 import { FaOpencart } from "react-icons/fa";
-import { PiTrademarkRegisteredLight } from "react-icons/pi";
 import { IoMdLogIn } from "react-icons/io";
 
 export default function Navbar() {
@@ -22,7 +21,7 @@ export default function Navbar() {
                 {user?.role === 'admin' ? (
                     <h1 className="text-3xl font-bold pl-10 text-green-500">Admin</h1>
                 ) : (
-                    <h1 className="flex items-center justify-center gap-5 text-3xl font-bold text-green-500"><h1>Go Cart</h1><FaOpencart className="text-5xl" /></h1>
+                    <Link to="/"><h1 className="flex items-center justify-center gap-5 text-3xl font-bold text-green-500"><p>Go Cart</p><FaOpencart className="text-5xl" /></h1></Link>
                 )}
                 <div className="flex w-sm rounded-md overflow-hidden">
                 <input 
@@ -39,7 +38,9 @@ export default function Navbar() {
                     user.role === 'user' ? (
                         <div className="flex gap-5">
                         <button className="flex items-center justify-center gap-2 hover:text-green-500 cursor-pointer"><CiDeliveryTruck className="text-2xl"/><p>Orders</p></button>
-                        <button className="flex items-center justify-center gap-2 hover:text-green-500 cursor-pointer"><CiShoppingCart className="text-2xl"/><p>Cart</p></button>
+                        <Link to="/cart">
+                            <button className="flex items-center justify-center gap-2 hover:text-green-500 cursor-pointer"><CiShoppingCart className="text-2xl"/><p>Cart</p></button>
+                        </Link>
                         <button className="flex items-center justify-center gap-2 hover:text-red-500 cursor-pointer" onClick={() => setShowModal(true)}><CiLogout className="text-2xo"/><p>Logout</p></button>
                     </div>
                     ) : <div className="flex gap-5">
@@ -64,18 +65,6 @@ export default function Navbar() {
             </div>
 
             <Message showMessage={showModal} setShowMessage={setShowModal} message={"Do you really want to logout?"} func={handleLogout} btn={"logout"}/>
-            {/* {showModal && (
-                <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50">
-                    <div className="bg-gray-500 rounded-xl shadow-lg p-6 w-[300px] space y-4">
-                        <h2 className="text-2xl text-center font-bold mb-5">Confirm Logout?</h2>
-                        <p>Are you sure you want to Logout?</p>
-                        <div className="flex justify-center items-center mt-5 gap-5">
-                            <button onClick={() => setShowModal(false)} className="bg-green-500 p-2 rounded-lg cursor-pointer">Cancel</button>
-                            <button onClick={handleLogout} className="bg-red-500 p-2 rounded-lg cursor-pointer">Logout</button>
-                        </div>
-                    </div>
-                </div>
-            )} */}
         </>
     )
 }
