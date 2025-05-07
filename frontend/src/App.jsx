@@ -8,6 +8,7 @@ import Product from "./pages/Product";
 import AddProduct from "./pages/AddProduct";
 import AdminRoute from "./routes/AdminRoute";
 import Footer from "./components/Footer";
+import Users from "./pages/Users";
 
 function AppRoutes() {
     const { user } = useContext(AuthContext); // ✅ Now this is inside AuthProvider
@@ -19,6 +20,7 @@ function AppRoutes() {
             <Route path="/login" element={<Login />} />
             <Route path="/:id" element={<Product />} />
             <Route path="/addproduct" element={<AdminRoute user={user}><AddProduct /></AdminRoute>} />
+            <Route path="/users" element={<AdminRoute user={user}><Users /></AdminRoute>} />
         </Routes>
     );
 }

@@ -2,6 +2,10 @@ import { useContext, useState } from "react"
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import Message from "./Message";
+import { CiDeliveryTruck, CiLogin, CiLogout, CiShoppingCart } from "react-icons/ci";
+import { FaOpencart } from "react-icons/fa";
+import { PiTrademarkRegisteredLight } from "react-icons/pi";
+import { IoMdLogIn } from "react-icons/io";
 
 export default function Navbar() {
     const { user, logout } = useContext(AuthContext);
@@ -18,7 +22,7 @@ export default function Navbar() {
                 {user?.role === 'admin' ? (
                     <h1 className="text-3xl font-bold pl-10 text-green-500">Admin</h1>
                 ) : (
-                    <h1 className="text-3xl font-bold text-green-500">Go Cart</h1>
+                    <h1 className="flex items-center justify-center gap-5 text-3xl font-bold text-green-500"><h1>Go Cart</h1><FaOpencart className="text-5xl" /></h1>
                 )}
                 <div className="flex w-sm rounded-md overflow-hidden">
                 <input 
@@ -34,24 +38,26 @@ export default function Navbar() {
                 {user ? (
                     user.role === 'user' ? (
                         <div className="flex gap-5">
-                        <button className="hover:text-green-500 cursor-pointer">Orders</button>
-                        <button className="hover:text-green-500 cursor-pointer">Cart</button>
-                        <button className="hover:text-red-500 cursor-pointer" onClick={() => setShowModal(true)}>Logout</button>
+                        <button className="flex items-center justify-center gap-2 hover:text-green-500 cursor-pointer"><CiDeliveryTruck className="text-2xl"/><p>Orders</p></button>
+                        <button className="flex items-center justify-center gap-2 hover:text-green-500 cursor-pointer"><CiShoppingCart className="text-2xl"/><p>Cart</p></button>
+                        <button className="flex items-center justify-center gap-2 hover:text-red-500 cursor-pointer" onClick={() => setShowModal(true)}><CiLogout className="text-2xo"/><p>Logout</p></button>
                     </div>
                     ) : <div className="flex gap-5">
                     <Link to="/addproduct">
                         <button className="hover:text-green-500 cursor-pointer">Add Product</button>
                     </Link>
-                    <button className="hover:text-green-500 cursor-pointer">View Users</button>
+                    <Link to="/users">
+                        <button className="hover:text-green-500 cursor-pointer">View Users</button>
+                    </Link>
                     <button className="hover:text-red-500 cursor-pointer" onClick={() => setShowModal(true)}>Logout</button>
                 </div>
                 ) : (
                     <ul className="flex gap-10">
                         <Link to="/login">
-                            <button className="hover:text-green-500 cursor-pointer">Login</button>
+                            <button className="flex items-center justify-center gap-2 hover:text-green-500 cursor-pointer"><CiLogin className="text-2xl"/><p>Login</p></button>
                         </Link>
                         <Link to="/register">
-                            <button className="hover:text-green-500 cursor-pointer">Register</button>
+                            <button className="flex items-center justify-center gap-2 hover:text-green-500 cursor-pointer"><IoMdLogIn className="text-2xl" /><p>Register</p></button>
                         </Link>
                     </ul>
                 )}
