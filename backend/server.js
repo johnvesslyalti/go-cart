@@ -12,7 +12,7 @@ connectDB()
 const app = express();
 
 const allowedOrigins = [
-    'https://go-cart-dtexe6f8w-johnvessly-altis-projects.vercel.app'  // Ensure no trailing slash
+    'https://go-cart-theta.vercel.app'  // Ensure no trailing slash
 ];
 
 app.use(cors({
