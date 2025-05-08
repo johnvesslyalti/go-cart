@@ -26,7 +26,6 @@ app.use(cors({
   credentials: true // If using cookies or authentication headers
 }));
 
-app.use(cors());
 app.use(express.json());
 
 app.use('/api/auth', userRoutes);
