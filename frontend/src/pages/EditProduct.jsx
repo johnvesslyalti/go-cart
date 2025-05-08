@@ -3,10 +3,12 @@ import api from "../utils/api";
 import { useParams } from "react-router-dom";
 import Back from "../components/Back";
 import { AuthContext } from "../context/AuthContext";
+import Successful from "../components/Successful";
 
 export default function EditProduct() {
     const { id } = useParams();
     const {token} = useContext(AuthContext);
+    const [success, setSuccess] = useState(false);
     const [product, setProduct] = useState({
         name: "",
         description: "",
@@ -31,7 +33,8 @@ export default function EditProduct() {
                     Authorization: `Bearer ${token}`
                 }
             });
-            alert("Product updated successfully!");
+            setSuccess(true); 
+            
         } catch (error) {
             console.error("Update failed:", error);
             alert("Update failed!");
@@ -42,6 +45,7 @@ export default function EditProduct() {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-900">
+            {success && <Successful message={"Product updated successfully"}/>}
             <Back />
             <form
                 onSubmit={e => {
