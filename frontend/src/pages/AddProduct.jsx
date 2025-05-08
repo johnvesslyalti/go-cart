@@ -7,9 +7,9 @@ import { IoMdArrowRoundBack } from "react-icons/io";
 export default function AddProduct() {
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
-    const [price, setPrice] = useState(0);
+    const [price, setPrice] = useState("");
     const [category, setCategory] = useState("");
-    const [stock, setStock] = useState(0);
+    const [stock, setStock] = useState("");
     const [imgURL, setImgURL] = useState("");
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(null);
@@ -48,7 +48,7 @@ export default function AddProduct() {
     };
 
     return (
-        <div className="min-h-screen flex justify-center items-center bg-gray-900 text-white px-4">
+        <div className="min-h-screen flex justify-center items-center bg-gray-900 text-white p-10">
             {success && (
                 <div className="absolute top-10 bg-green-500 px-4 py-3 rounded shadow-lg">
                     Product added successfully!

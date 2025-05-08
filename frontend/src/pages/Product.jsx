@@ -1,12 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import api from "../utils/api";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { IoMdArrowRoundBack } from "react-icons/io";
+import { AuthContext } from "../context/AuthContext";
 
 export default function Product() {
     const [product, setProduct] = useState(null);
     const { id } = useParams();
     const navigate = useNavigate();
+    const { user } = useContext(AuthContext);
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -21,7 +23,7 @@ export default function Product() {
         fetchProduct();
     }, [id]);
 
-    if (!product) return <p>Loading...</p>;
+    if (!product) return <div className="min-h-screen flex justify-center items-center"><p>Loading...</p></div>;
 
     return (
         <div className="min-h-screen flex flex-col md:flex-row items-center gap-8 p-5 pt-20">
@@ -36,11 +38,24 @@ export default function Product() {
             <div className="w-full md:w-1/2 space-y-4">
                 <h2 className="text-3xl font-bold">{product.name}</h2>
                 <p className="text-gray-500">{product.description}</p>
-                <p className="text-xl font-semibold text-green-600">Price: ${product.price}</p>
-                <div className="flex items-center gap-2 mt-3">
+                <p className="text-xl font-semibold text-green-600">Price: ₹{product.price}</p>
+                {user?.role === 'user' ? (
+                    <div className="flex items-center gap-2 mt-3">
                     <button className="bg-green-500 px-3 py-2 rounded-xl text-sm cursor-pointer">Add to cart</button>
                     <button className="bg-green-600 px-3 py-2 rounded-xl text-sm cursor-pointer">Buy now</button>
                 </div>
+                ) : user?.role === 'admin' ? (
+                    <div className="flex items-center gap-2 mt-3">
+                        <Link to={`/edit/${id}`}>
+                            <button className="bg-green-500 px-3 py-2 rounded-xl text-sm w-[100px] cursor-pointer">Edit</button>
+                        </Link>
+                    </div>
+                ) : (
+                    <div className="flex items-center gap-2 mt-3">
+                    <button className="bg-green-500 px-3 py-2 rounded-xl text-sm cursor-pointer">Add to cart</button>
+                    <button className="bg-green-600 px-3 py-2 rounded-xl text-sm cursor-pointer">Buy now</button>
+                    </div>  
+                )}
             </div>
         </div>
     );

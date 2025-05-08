@@ -7,18 +7,52 @@ import Message from "../components/Message";
 
 export default function Home() {
   const [products, setProducts] = useState([]);
+  const [page, setPage] = useState(1);
+  const [hasmore, setHasmore] = useState(true);
   const { user, token } = useContext(AuthContext);
   const [cartMessage, setCartMessage] = useState(false);
   const navigate = useNavigate();
+  const limit = 10;
 
   const fetchProducts = async () => {
-    const response = await api.get("/products");
-    setProducts(response.data);
+    try {
+      const response = await api.get(`/products?page=${page}&limit=${limit}`);
+      const data = response.data;
+  
+      setProducts((prev) => {
+        const allProducts = [...prev, ...data.products];
+  
+        // Remove duplicates by _id
+        const uniqueProducts = allProducts.filter(
+          (product, index, self) =>
+            index === self.findIndex((p) => p._id === product._id)
+        );
+  
+        return uniqueProducts;
+      });
+  
+      setHasmore(page < data.totalPages);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [page]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if(
+        window.innerHeight + window.scrollY >= document.body.offsetHeight - 2 && hasmore
+      ) {
+        setPage((prev) => prev + 1);
+      }
+    }
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll); 
+  }, [hasmore])
 
   const addToCart = async (product) => {
     try {
@@ -72,7 +106,7 @@ export default function Home() {
               <p className="font-bold text-xl line-clamp-2 break-words">
                 {product.name}
               </p>
-              <p className="text-green-200 mt-1">${product.price}</p>
+              <p className="text-green-200 mt-1">₹{product.price}</p>
             </div>
           </Link>
         
@@ -88,9 +122,11 @@ export default function Home() {
             </div>
           ) : user?.role === "admin" ? (
             <div className="flex justify-center items-center gap-2 mt-3">
-              <button className="bg-green-700 w-full px-3 py-2 rounded-xl text-sm">
-                Edit Product
-              </button>
+              <Link to={`/edit/${product._id}`} className="bg-green-700 w-full px-3 py-2 rounded-xl text-sm">
+                <button className="cursor-pointer">
+                  Edit Product
+                </button>
+              </Link>
               <button
                 className="bg-red-700 w-full px-3 py-2 rounded-xl text-sm cursor-pointer"
                 onClick={() => deleteProduct(product._id)}
