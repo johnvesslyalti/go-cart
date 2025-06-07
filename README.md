@@ -32,30 +32,30 @@ API End Points:
 
 Folder Structure:
 
-|-  backend
-|-  fronend
-|-  .gitignore
-|-  README.nd
+    |-  backend
+    |-  fronend
+    |-  .gitignore
+    |-  README.nd
 
-backend:
-    |-  config/
-        |-  db.ts
-    |-  controllers/
-        |-  cartController.ts
-        |-  productController.ts
-        |-  userController.ts
-    |-  middleware/
-        |-  authMiddleware.ts
-    |-  models/
-        |-  Cart.ts
-        |-  Product.ts
-        |-  User.ts
-    |-  routes/
-        |-  cartRoutes.ts
-        |-  productRoutes.ts
-        |-  userRoutes.ts
-    |-  .env
-    |-  index.ts
+    backend:
+        |-  config/
+            |-  db.ts
+        |-  controllers/
+            |-  cartController.ts
+            |-  productController.ts
+            |-  userController.ts
+        |-  middleware/
+            |-  authMiddleware.ts
+        |-  models/
+            |-  Cart.ts
+            |-  Product.ts
+            |-  User.ts
+        |-  routes/
+            |-  cartRoutes.ts
+            |-  productRoutes.ts
+            |-  userRoutes.ts
+        |-  .env
+        |-  index.ts
 
 frontend:
 
