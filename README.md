@@ -25,8 +25,10 @@ Tech Stack:
         MongoDB
 
 Installation:
+
     npm install --save-dev typescript
     npm install --save-dev @types/node @types/react @types/react-dom
+    npx tsc --init
 
 API End Points:
 
