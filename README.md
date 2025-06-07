@@ -1,7 +1,9 @@
 Project Title:
+
     Go Cart
 
 Description:
+
     Go Cart is a full-stack e-commerce web application where users can browse products, add them to the cart, and place orders.
 
 Demo:
@@ -59,8 +61,8 @@ Folder Structure:
         |-  .env
         |-  index.ts
 
-frontend:
+    frontend:
 
 Contributing:
 
-Contributions are welcome! Please fork the repo and submit a pull request.
+    Contributions are welcome! Please fork the repo and submit a pull request.
