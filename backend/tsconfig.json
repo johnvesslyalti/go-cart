@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "typeRoots": ["./node_modules/@types", "./src/types"],
     "target": "ES2020",                        // Modern JS features (can also use ES2022)
     "module": "CommonJS",                      // Node.js uses CommonJS
     "strict": true,                            // Enables all strict type checks
@@ -11,7 +10,8 @@
     "outDir": "./dist",                        // Output directory for compiled JS files
     "rootDir": "./src",                        // Where TypeScript starts compiling
     "resolveJsonModule": true,                 // Allows importing JSON files
-    "types": ["node"]                          // Includes Node.js types
+    "types": ["node"],
+    "typeRoots": ["./src/types", "./node_modules/@types"]                         // Includes Node.js types
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]

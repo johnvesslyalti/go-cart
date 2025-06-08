@@ -1,10 +1,10 @@
-// types/express/index.d.ts
-import { IUser } from '../../models/User'; // Adjust based on your actual user model
+ // adjust path as needed
+import { IUser } from "../../models/User";
 
 declare global {
   namespace Express {
     interface Request {
-      user?: any; // or whatever type you're using for req.user
+      user?: IUser;
     }
   }
 }
