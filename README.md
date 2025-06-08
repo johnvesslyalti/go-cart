@@ -8,7 +8,7 @@ Description:
 
 Demo:
 
-    ![Home Page Screenshot](frontend/public/go-cart-readme.png)
+    ![Home Page Screenshot](frontend/go-cart-readme.png)
 
 Features:
 
@@ -76,7 +76,7 @@ API End Points:
 Folder Structure:
 
     |-  backend
-    |-  fronend
+    |-  frontend
     |-  .gitignore
     |-  README.nd
 
