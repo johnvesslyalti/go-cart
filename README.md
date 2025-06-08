@@ -34,6 +34,25 @@ Installation:
 
 API End Points:
 
+    GET:
+        /api/products
+        /api/products/:id
+        /api/cart  (users only)
+        /api/users (admins only)    
+
+    POST:
+        /api/cart
+        /api/products (admin only)
+        /api/cart (users only)
+        /api/auth/register
+        /api/auth/login
+
+    UPDATE:
+        /api/products   (admins only)
+
+    DELETE:
+        /api/products   (admins only)
+
 Folder Structure:
 
     |-  backend
@@ -42,6 +61,7 @@ Folder Structure:
     |-  README.nd
 
     backend:
+        |- dist/
         |- src/
             |-  config/
                 |-  db.ts
