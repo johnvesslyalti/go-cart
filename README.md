@@ -7,7 +7,8 @@ Description:
     Go Cart is a full-stack e-commerce web application where users can browse products, add them to the cart, and place orders.
 
 Demo:
-    ![Home Page Screenshot](frontend/public/go-cart-readme.png)
+
+![Home Page Screenshot](frontend/public/go-cart-readme.png)
 
 Features:
 
