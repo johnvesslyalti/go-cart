@@ -1,15 +1,15 @@
-import express from 'express';
-import connectDB from './config/db.js';
+import express, { Express } from 'express';
+import connectDB from './config/db';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import userRoutes from './routes/userRoutes.js';
-import productRoutes from './routes/productRoutes.js';
-import cartRoutes from './routes/cartRoutes.js'
+import userRoutes from './routes/userRoutes';
+import productRoutes from './routes/productRoutes';
+import cartRoutes from './routes/cartRoutes'
 
 dotenv.config();
 connectDB()
 
-const app = express();
+const app: Express = express();
 
 const allowedOrigins = [
     'https://go-cart-rust.vercel.app',
@@ -17,7 +17,7 @@ const allowedOrigins = [
 ];
 
 app.use(cors({
-  origin: function (origin, callback) {
+  origin: (origin, callback) => {
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
@@ -33,7 +33,7 @@ app.use('/api/auth', userRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/cart', cartRoutes);
 
-const PORT = process.env.PORT || 5000
+const PORT: number = parseInt(process.env.PORT || '5000', 10);
 
 app.listen(PORT, () => {
     console.log(`http://localhost:${PORT}`);

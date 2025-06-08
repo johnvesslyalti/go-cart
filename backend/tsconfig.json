@@ -1,13 +1,18 @@
 {
   "compilerOptions": {
-    "target": "ES6",
-    "module": "ESNext",
-    "strict": true,
-    "jsx": "react-jsx",
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "typeRoots": ["./node_modules/@types", "./src/types"],
+    "target": "ES2020",                        // Modern JS features (can also use ES2022)
+    "module": "CommonJS",                      // Node.js uses CommonJS
+    "strict": true,                            // Enables all strict type checks
+    "moduleResolution": "node",                // Proper Node-style module resolution
+    "esModuleInterop": true,                   // Enables default import compatibility
+    "skipLibCheck": true,                      // Speeds up build
+    "forceConsistentCasingInFileNames": true,  // Prevents issues with case-sensitive paths
+    "outDir": "./dist",                        // Output directory for compiled JS files
+    "rootDir": "./src",                        // Where TypeScript starts compiling
+    "resolveJsonModule": true,                 // Allows importing JSON files
+    "types": ["node"]                          // Includes Node.js types
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
 }
