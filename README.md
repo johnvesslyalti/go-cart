@@ -8,7 +8,7 @@ Description:
 
 Demo:
 
-    ![Home Page Screenshot](frontend/go-cart-readme.png)
+    ![Home Page Screenshot](frontend/public/go-cart-readme.png)
 
 Features:
 
