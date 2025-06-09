@@ -48,7 +48,7 @@ export default function Login(): JSX.Element {
     setSuccess(true);
 
     setTimeout(() => {
-      navigate(user.role === "admin" ? "/admin" : "/");
+      navigate(user.role === "admin" ? "/" : "/");
     }, 3000);
   } catch (err: any) {
     const message =
@@ -94,19 +94,23 @@ export default function Login(): JSX.Element {
         />
 
                 <div className="relative">
-                    <input
-                        type={showPassword ? "password" : "text"}
-                        placeholder="Enter password"
-                        className="px-4 py-2 rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400 w-full"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                    <button
-                        className="absolute top-3 right-2"
-                        onClick={togglePassword}>
-                        {showPassword ? <FaRegEyeSlash /> : <FaRegEye />}
-                    </button>
-                </div>
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Enter password"
+            className="px-4 py-2 rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400 w-full"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <button
+            type="button"
+            className="absolute top-3 right-2"
+            onClick={togglePassword}
+            aria-label={showPassword ? "Hide password" : "Show password"}
+          >
+            {showPassword ? <FaRegEye /> : <FaRegEyeSlash />}
+          </button>
+        </div>
 
         <button
           type="submit"

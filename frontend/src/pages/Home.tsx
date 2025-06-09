@@ -1,9 +1,10 @@
 import { useContext, useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import api from "../utils/api";
-import { AuthContext, User } from "../context/AuthContext";
+import { AuthContext } from "../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import Message from "../components/Message";
+import { User } from "../types/types";
 
 // Define product interface
 interface Product {

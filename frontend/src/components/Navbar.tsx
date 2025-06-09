@@ -1,10 +1,11 @@
 import { useContext, useState } from "react"
 import { Link } from "react-router-dom";
-import { AuthContext, User } from "../context/AuthContext";
+import { AuthContext } from "../context/AuthContext";
 import Message from "./Message";
 import { CiDeliveryTruck, CiLogout, CiMenuBurger, CiShoppingCart } from "react-icons/ci";
 import { FaOpencart } from "react-icons/fa";
 import { RxCross1 } from "react-icons/rx";
+import { User } from "../types/types";
 
 interface NavbarProps {
     search: string;
@@ -43,13 +44,15 @@ const Navbar: React.FC<NavbarProps> = ({ search, onSearchChange}) => {
                     onChange={(e) => onSearchChange(e.target.value)}
                 />
                 </div>
-
+                {/* Menu hamburger*/}
                 <button
                 className="md:hidden text-3xl"
                 onClick={() => setMenuOpen(!menuOpen)}
                 >   
                     {menuOpen ? <RxCross1 /> : <CiMenuBurger />}
                 </button>
+
+                {/* Desktop menu */}
                 <div className="hidden md:flex">
                 {user ? (
                     user.role === 'user' ? (
@@ -81,6 +84,65 @@ const Navbar: React.FC<NavbarProps> = ({ search, onSearchChange}) => {
                 )}
             </div>
             </div>
+
+            {/* mobile screen menu */}
+            {menuOpen && (
+                <div className="md:hidden bg-gray-900 text-white flex flex-col gap-4 px-4 py-4">
+                    {user ? (
+            user.role === "user" ? (
+              <>
+                <button className="flex items-center gap-2 hover:text-green-500" onClick={() => setMenuOpen(false)}>
+                  <CiDeliveryTruck className="text-2xl" />
+                  Orders
+                </button>
+                <Link to="/cart" onClick={() => setMenuOpen(false)}>
+                  <button className="flex items-center gap-2 hover:text-green-500 w-full text-left">
+                    <CiShoppingCart className="text-2xl" />
+                    Cart
+                  </button>
+                </Link>
+                <button
+                  className="flex items-center gap-2 hover:text-red-500"
+                  onClick={() => {
+                    setShowModal(true);
+                    setMenuOpen(false);
+                  }}
+                >
+                  <CiLogout className="text-2xl" />
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link to="/addproduct" onClick={() => setMenuOpen(false)}>
+                  <button className="hover:text-green-500 w-full text-left">Add Product</button>
+                </Link>
+                <Link to="/users" onClick={() => setMenuOpen(false)}>
+                  <button className="hover:text-green-500 w-full text-left">View Users</button>
+                </Link>
+                <button
+                  className="hover:text-red-500 w-full text-left"
+                  onClick={() => {
+                    setShowModal(true);
+                    setMenuOpen(false);
+                  }}
+                >
+                  Logout
+                </button>
+              </>
+            )
+          ) : (
+            <>
+              <Link to="/login" onClick={() => setMenuOpen(false)}>
+                <button className="hover:text-green-500 w-full text-left">Login</button>
+              </Link>
+              <Link to="/register" onClick={() => setMenuOpen(false)}>
+                <button className="hover:text-green-500 w-full text-left">Register</button>
+              </Link>
+            </>
+          )}
+                </div>
+            )}
 
             <Message showMessage={showModal} setShowMessage={setShowModal} message={"Do you really want to logout?"} func={handleLogout} btn={"logout"}/>
         </>
