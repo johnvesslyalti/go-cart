@@ -1,31 +1,44 @@
-import { useContext, useState } from "react";
+import { FormEvent, JSX, useContext, useState } from "react";
 import api from "../utils/api";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext"; // Ensure it's the default import
+import { AuthContext, User } from "../context/AuthContext"; // Ensure it's the default import
 import { IoMdArrowRoundBack } from "react-icons/io";
 
-export default function Login() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [success, setSuccess] = useState(false);
-    const [error, setError] = useState(null); // For handling error messages
-    const [loading, setLoading] = useState(false); // For loading state
-    const { login } = useContext(AuthContext);
+interface AuthContextType {
+    login: (userData: User, token: string) => void;
+}
+
+interface LoginResponse {
+    user: User;
+    token: string;
+}
+
+export default function Login(): JSX.Element {
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    const [success, setSuccess] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null); // For handling error messages
+    const [loading, setLoading] = useState<boolean>(false); // For loading state
+    const { login } = useContext(AuthContext) as AuthContextType;
+
     const navigate = useNavigate();
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true); // Start loading
         setError(null); // Clear any previous error
+
         try {
-            const response = await api.post('/auth/login', { email, password });
+            const response = await api.post<LoginResponse>('/auth/login', { email, password });
+
+            const { user, token } = response.data;
 
             // Call the login function from context
-            login(response.data, response.data.token);
+            login(user, token);
             setEmail('');
             setPassword('');
             setSuccess(true);
-            if(response.data.role === "admin") {
+            if(response.data.user.role === "admin") {
                 setTimeout(() => {
                     navigate('/');
                 }, 3000);

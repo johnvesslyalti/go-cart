@@ -2,18 +2,27 @@ import { useState, useEffect, useContext } from "react";
 import api from "../utils/api";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { IoMdArrowRoundBack } from "react-icons/io";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext, User } from "../context/AuthContext";
+
+interface IProduct {
+    name: string;
+    description: string;
+    price: number;
+    category: string;
+    stock: number;
+    image: string;
+}
 
 export default function Product() {
-    const [product, setProduct] = useState(null);
+    const [product, setProduct] = useState<IProduct | null>(null);
     const { id } = useParams();
     const navigate = useNavigate();
-    const { user } = useContext(AuthContext);
+    const { user } = useContext(AuthContext) as { user: User | null};
 
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const response = await api.get(`/products/${id}`);
+                const response = await api.get<IProduct>(`/products/${id}`);
                 setProduct(response.data);
             } catch (error) {
                 console.error("Failed to fetch product:", error);

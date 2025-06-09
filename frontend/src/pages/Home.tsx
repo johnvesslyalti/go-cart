@@ -1,27 +1,41 @@
 import { useContext, useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import api from "../utils/api";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext, User } from "../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import Message from "../components/Message";
 
+// Define product interface
+interface Product {
+  _id: string;
+  name: string;
+  price: number;
+  image: string;
+}
+
+// Define context interface
+interface IContext {
+  user: User;
+  token: string;
+}
+
 export default function Home() {
-  const [products, setProducts] = useState([]);
-  const [cartMessage, setCartMessage] = useState(false);
-  const [search, setSearch] = useState('');
-  const { user, token } = useContext(AuthContext);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [cartMessage, setCartMessage] = useState<boolean>(false);
+  const [search, setSearch] = useState<string>('');
+  const { user, token } = useContext(AuthContext) as IContext;
   const navigate = useNavigate();
 
   const fetchProducts = async () => {
     try {
-      const response = await api.get('/products');
+      const response = await api.get<{products: Product[] }>('/products');
       setProducts(response.data.products);
-     } catch (error) {
+    } catch (error) {
       console.error(error);
     }
   };
 
-  const filteredProducts = products.filter((product) => 
+  const filteredProducts = products.filter((product) =>
     product.name.toLowerCase().includes(search.toLowerCase())
   );
 
@@ -29,24 +43,24 @@ export default function Home() {
     fetchProducts();
   }, []);
 
-  const addToCart = async (product) => {
+  const addToCart = async (product: Product) => {
     try {
-      if(user) {
-        const response = await api.post('/cart', {productId: product._id}, {
+      if (user) {
+        await api.post('/cart', { productId: product._id }, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
           }
-        })
+        });
       } else {
         setCartMessage(true);
       }
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
-  const deleteProduct = async (id) => {
+  const deleteProduct = async (id: string) => {
     try {
       await api.delete(`/products/${id}`, {
         headers: {
@@ -61,58 +75,63 @@ export default function Home() {
 
   return (
     <div className="p-5">
-      <Navbar search={search} onSearchChange={setSearch}/>
-        <Message showMessage={cartMessage} setShowMessage={setCartMessage} message={"Please login to add items to cart!"} func={() => navigate('/login')} btn={"Login"}/>
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-5 py-10">
+      <Navbar search={search} onSearchChange={setSearch} />
+      <Message
+        showMessage={cartMessage}
+        setShowMessage={setCartMessage}
+        message={"Please login to add items to cart!"}
+        func={() => navigate('/login')}
+        btn={"Login"}
+      />
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-5 py-10">
         {filteredProducts.map((product) => (
           <div
-          key={product._id}
-          className="p-5 bg-gray-700 rounded-2xl flex flex-col justify-between h-[400px] hover:scale-101"
-        >
-          <Link to={`/${product._id}`} className="flex-grow">
-            <div className="h-48 overflow-hidden rounded-xl">
-              <img
-                src={product.image}
-                alt={product.name}
-                className="w-full h-full object-contain"
-              />
-            </div>
-            <div className="mt-5 flex flex-col flex-grow">
-              <p className="font-bold text-xl line-clamp-2 break-words">
-                {product.name}
-              </p>
-              <p className="text-green-200 mt-1">₹{product.price}</p>
-            </div>
-          </Link>
-        
-          {/* Buttons always stick to the bottom */}
-          {user?.role === "user" || !user ? (
-            <div className="flex justify-center items-center gap-2 mt-3 w-full">
-              <button onClick={() => addToCart(product)} className="bg-green-500 px-3 py-2 rounded-xl text-[10px] md:text-sm cursor-pointer">
-                Add to cart
-              </button>
-              <button className="bg-green-600 px-3 py-2 rounded-xl text-[10px] md:text-sm cursor-pointer">
-                Buy now
-              </button>
-            </div>
-          ) : user?.role === "admin" ? (
-            <div className="flex justify-center items-center gap-2 mt-3">
-              <Link to={`/edit/${product._id}`} className="bg-green-700 w-full px-3 py-2 rounded-xl text-sm">
-                <button className="cursor-pointer">
-                  Edit Product
+            key={product._id}
+            className="p-5 bg-gray-700 rounded-2xl flex flex-col justify-between h-[400px] hover:scale-101"
+          >
+            <Link to={`/${product._id}`} className="flex-grow">
+              <div className="h-48 overflow-hidden rounded-xl">
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="w-full h-full object-contain"
+                />
+              </div>
+              <div className="mt-5 flex flex-col flex-grow">
+                <p className="font-bold text-xl line-clamp-2 break-words">
+                  {product.name}
+                </p>
+                <p className="text-green-200 mt-1">₹{product.price}</p>
+              </div>
+            </Link>
+
+            {user?.role === "user" || !user ? (
+              <div className="flex justify-center items-center gap-2 mt-3 w-full">
+                <button onClick={() => addToCart(product)} className="bg-green-500 px-3 py-2 rounded-xl text-[10px] md:text-sm cursor-pointer">
+                  Add to cart
                 </button>
-              </Link>
-              <button
-                className="bg-red-700 w-full px-3 py-2 rounded-xl text-sm cursor-pointer"
-                onClick={() => deleteProduct(product._id)}
-              >
-                Delete Product
-              </button>
-            </div>
-          ) : null}
-        </div>        
+                <button className="bg-green-600 px-3 py-2 rounded-xl text-[10px] md:text-sm cursor-pointer">
+                  Buy now
+                </button>
+              </div>
+            ) : user?.role === "admin" ? (
+              <div className="flex justify-center items-center gap-2 mt-3">
+                <Link to={`/edit/${product._id}`} className="bg-green-700 w-full px-3 py-2 rounded-xl text-sm">
+                  <button className="cursor-pointer">
+                    Edit Product
+                  </button>
+                </Link>
+                <button
+                  className="bg-red-700 w-full px-3 py-2 rounded-xl text-sm cursor-pointer"
+                  onClick={() => deleteProduct(product._id)}
+                >
+                  Delete Product
+                </button>
+              </div>
+            ) : null}
+          </div>
         ))}
-        </div>
       </div>
+    </div>
   );
 }

@@ -4,12 +4,14 @@ import { useParams } from "react-router-dom";
 import Back from "../components/Back";
 import { AuthContext } from "../context/AuthContext";
 import Successful from "../components/Successful";
+import { Product } from "./Cart";
 
 export default function EditProduct() {
-    const { id } = useParams();
-    const {token} = useContext(AuthContext);
-    const [success, setSuccess] = useState(false);
-    const [product, setProduct] = useState({
+    const { id } = useParams<string>();
+    const {token} = useContext(AuthContext) as {token: string};
+    const [success, setSuccess] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [product, setProduct] = useState<Product>({
         name: "",
         description: "",
         price: 0,
@@ -17,11 +19,11 @@ export default function EditProduct() {
         stock: 0,
         image: ""
     });
-    const [loading, setLoading] = useState(false);
+    
 
     useEffect(() => {
         api.get(`/products/${id}`)
-            .then(res => setProduct(res.data))
+            .then(res => setProduct(res.data as Product))
             .catch(err => console.error(err));
     }, [id]);
 
@@ -77,7 +79,7 @@ export default function EditProduct() {
                     placeholder="Price"
                     className="appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none px-4 py-2 rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400"
                     value={product.price}
-                    onChange={e => setProduct({ ...product, price: e.target.value })}
+                    onChange={e => setProduct({ ...product, price: Number(e.target.value) })}
                 />
 
                 <input
@@ -93,7 +95,7 @@ export default function EditProduct() {
                     placeholder="Stock"
                     className="appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none px-4 py-2 rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400"
                     value={product.stock}
-                    onChange={e => setProduct({ ...product, stock: e.target.value })}
+                    onChange={e => setProduct({ ...product, stock: Number(e.target.value) })}
                 />
 
                 <input

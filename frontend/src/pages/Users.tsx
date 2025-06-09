@@ -1,17 +1,17 @@
 import { useContext, useEffect, useState } from "react"
 import api from "../utils/api";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext, User } from "../context/AuthContext";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 
 export default function Users() {
-    const [users, setUsers] = useState([]);
-    const { token } = useContext(AuthContext);
+    const [users, setUsers] = useState<User[]>([]);
+    const { token } = useContext(AuthContext) as { token: string};
     const navigate = useNavigate();
 
     const fetchUsers = async () => {
         try {
-            const response = await api.get('/auth/users', {
+            const response = await api.get<User[]>('/auth/users', {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

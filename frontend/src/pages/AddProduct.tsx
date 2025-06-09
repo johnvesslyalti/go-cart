@@ -1,24 +1,24 @@
-import { useContext, useState } from "react";
+import { FormEvent, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../utils/api";
 import { AuthContext } from "../context/AuthContext";
 import { IoMdArrowRoundBack } from "react-icons/io";
 
-export default function AddProduct() {
-    const [name, setName] = useState("");
-    const [description, setDescription] = useState("");
-    const [price, setPrice] = useState("");
-    const [category, setCategory] = useState("");
-    const [stock, setStock] = useState("");
-    const [imgURL, setImgURL] = useState("");
-    const [success, setSuccess] = useState(false);
-    const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(false);
+const AddProduct: React.FC = () => {
+    const [name, setName] = useState<string>("");
+    const [description, setDescription] = useState<string>("");
+    const [price, setPrice] = useState<number>(0);
+    const [category, setCategory] = useState<string>("");
+    const [stock, setStock] = useState<number>(0);
+    const [imgURL, setImgURL] = useState<string>("");
+    const [success, setSuccess] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState<boolean>(false);
 
-    const { token } = useContext(AuthContext);
+    const { token } = useContext(AuthContext) as {token: string};
     const navigate = useNavigate();
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
         setError(null);
@@ -91,7 +91,7 @@ export default function AddProduct() {
                     [&::-webkit-inner-spin-button]:appearance-none
                     px-4 py-2 rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400"
                     value={price}
-                    onChange={(e) => setPrice(e.target.value)}
+                    onChange={(e) => setPrice(Number(e.target.value))}
                 />
 
                 <input
@@ -110,7 +110,7 @@ export default function AddProduct() {
                     [&::-webkit-inner-spin-button]:appearance-none
                     px-4 py-2 rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400"
                     value={stock}
-                    onChange={(e) => setStock(e.target.value)}
+                    onChange={(e) => setStock(Number(e.target.value))}
                 />
 
                 <input
@@ -132,3 +132,5 @@ export default function AddProduct() {
         </div>
     );
 }
+
+export default AddProduct;
