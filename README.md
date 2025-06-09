@@ -58,20 +58,19 @@ API End Points:
         /api/products
         /api/products/:id
         /api/cart  (users only)
-        /api/users (admins only)    
+        /api/auth/users (admins only)    
 
     POST:
-        /api/cart
         /api/products (admin only)
         /api/cart (users only)
         /api/auth/register
         /api/auth/login
 
     UPDATE:
-        /api/products   (admins only)
+        /api/products/:id   (admins only)
 
     DELETE:
-        /api/products   (admins only)
+        /api/products/:id   (admins only)
 
 Folder Structure:
 

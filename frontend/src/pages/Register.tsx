@@ -2,14 +2,20 @@ import { FormEvent, useState } from "react";
 import api from "../utils/api";
 import { useNavigate } from "react-router-dom";
 import { IoMdArrowRoundBack } from "react-icons/io";
+import { FaRegEye } from "react-icons/fa";
+import { FaRegEyeSlash } from "react-icons/fa";
 
 export default function Register() {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [success, setSuccess] = useState(false);
+    const [name, setName] = useState<string>('');
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    const [success, setSuccess] = useState<boolean>(false);
+    const [showPassword, setShowPassword] = useState<boolean>(false)
     const navigate = useNavigate();
 
+    const togglePassword = () => {
+        setShowPassword(prev => !prev)
+    }
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
@@ -54,15 +60,20 @@ export default function Register() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                 />
-
-                <input
-                    type="password"
-                    placeholder="Enter password"
-                    className="px-4 py-2 rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-
+                <div className="relative">
+                    <input
+                        type={showPassword ? "password" : "text"}
+                        placeholder="Enter password"
+                        className="px-4 py-2 rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400 w-full"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                    <button
+                    className="absolute top-3 right-2"
+                        onClick={togglePassword}>
+                            {showPassword ? <FaRegEyeSlash /> : <FaRegEye />}
+                    </button>
+                </div>
                 <button
                     type="submit"
                     className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 rounded-md transition duration-200 cursor-pointer"

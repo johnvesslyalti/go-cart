@@ -1,96 +1,121 @@
 import { FormEvent, JSX, useContext, useState } from "react";
 import api from "../utils/api";
 import { useNavigate } from "react-router-dom";
-import { AuthContext, User } from "../context/AuthContext"; // Ensure it's the default import
+import { AuthContext } from "../context/AuthContext";
 import { IoMdArrowRoundBack } from "react-icons/io";
-
-interface AuthContextType {
-    login: (userData: User, token: string) => void;
-}
-
-interface LoginResponse {
-    user: User;
-    token: string;
-}
+import { LoginResponse } from "../types/types";
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 
 export default function Login(): JSX.Element {
-    const [email, setEmail] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
-    const [success, setSuccess] = useState<boolean>(false);
-    const [error, setError] = useState<string | null>(null); // For handling error messages
-    const [loading, setLoading] = useState<boolean>(false); // For loading state
-    const { login } = useContext(AuthContext) as AuthContextType;
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [success, setSuccess] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
-    const navigate = useNavigate();
+  const togglePassword = () => {
+    setShowPassword(prev => !prev)
+  }
 
-    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        setLoading(true); // Start loading
-        setError(null); // Clear any previous error
+  const authContext = useContext(AuthContext);
+    if (!authContext) {
+        throw new Error("AuthContext must be used within an AuthProvider");
+    }
+    const { login } = authContext;
 
-        try {
-            const response = await api.post<LoginResponse>('/auth/login', { email, password });
+  const navigate = useNavigate();
 
-            const { user, token } = response.data;
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  setLoading(true);
+  setError(null);
 
-            // Call the login function from context
-            login(user, token);
-            setEmail('');
-            setPassword('');
-            setSuccess(true);
-            if(response.data.user.role === "admin") {
-                setTimeout(() => {
-                    navigate('/');
-                }, 3000);
-            } else {
-                setTimeout(() => {
-                    navigate('/'); // Redirect after successful login
-                }, 3000);
-            }
-        } catch (error) {
-            setError("Login failed. Please check your credentials."); // Show error message
-            console.error(error);
-        } finally {
-            setLoading(false); // End loading
-        }
-    };
+  try {
+    const response = await api.post<LoginResponse>("/auth/login", { email, password });
+    const data: LoginResponse = response.data;
 
-    return (
-        <div className="h-screen flex justify-center items-center bg-gray-900 text-white px-4">
-            {success && (
-                <div className="absolute top-10 bg-green-500 px-2 py-3 animate-bounce">Login successful</div>
-            )}
-            {error && (
-                <div className="absolute top-10 bg-red-500 px-2 py-3 animate-bounce">{error}</div> // Display error message
-            )}
-            <div onClick={() => navigate("/")} className="absolute flex justify-center items-center cursor-pointer group gap-2 text-lg top-5 left-5"><IoMdArrowRoundBack className="group-hover:text-green-500" /><p className="group-hover:text-green-500">Back</p></div>
-            <form onSubmit={handleSubmit} className="w-full max-w-sm flex flex-col gap-5 p-6 bg-gray-800 rounded-xl shadow-xl">
-                <h1 className="text-3xl text-green-400 font-bold text-center">Login</h1>
+    const { token, ...user } = data;
 
-                <input
-                    type="email"
-                    placeholder="Enter email"
-                    className="px-4 py-2 rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
+    if (!token || !user || !user.role) {
+      throw new Error("Invalid login response.");
+    }
 
-                <input
-                    type="password"
-                    placeholder="Enter password"
-                    className="px-4 py-2 rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
+    login(user, token);
 
-                <button
-                    type="submit"
-                    className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 rounded-md transition duration-200 cursor-pointer"
-                    disabled={loading} // Disable the button when loading
-                >
-                    {loading ? "Loading..." : "Login"}
-                </button>
-            </form>
+    setEmail("");
+    setPassword("");
+    setSuccess(true);
+
+    setTimeout(() => {
+      navigate(user.role === "admin" ? "/admin" : "/");
+    }, 3000);
+  } catch (err: any) {
+    const message =
+      err.response?.data?.message || err.message || "Login failed. Please check your credentials.";
+    setError(message);
+    console.error("Login error:", err);
+  } finally {
+    setLoading(false);
+  }
+};
+
+
+  return (
+    <div className="h-screen flex justify-center items-center bg-gray-900 text-white px-4 relative">
+      {success && (
+        <div className="absolute top-10 bg-green-500 px-2 py-3 rounded animate-bounce">
+          Login successful
         </div>
-    );
+      )}
+      {error && (
+        <div className="absolute top-10 bg-red-500 px-2 py-3 rounded animate-bounce">{error}</div>
+      )}
+      <div
+        onClick={() => navigate("/")}
+        className="absolute top-5 left-5 flex items-center gap-2 cursor-pointer group text-lg"
+      >
+        <IoMdArrowRoundBack className="group-hover:text-green-500" />
+        <p className="group-hover:text-green-500">Back</p>
+      </div>
+      <form
+        onSubmit={handleSubmit}
+        className="w-full max-w-sm flex flex-col gap-5 p-6 bg-gray-800 rounded-xl shadow-xl"
+      >
+        <h1 className="text-3xl text-green-400 font-bold text-center">Login</h1>
+
+        <input
+          type="email"
+          placeholder="Enter email"
+          className="px-4 py-2 rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+
+                <div className="relative">
+                    <input
+                        type={showPassword ? "password" : "text"}
+                        placeholder="Enter password"
+                        className="px-4 py-2 rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400 w-full"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                    <button
+                        className="absolute top-3 right-2"
+                        onClick={togglePassword}>
+                        {showPassword ? <FaRegEyeSlash /> : <FaRegEye />}
+                    </button>
+                </div>
+
+        <button
+          type="submit"
+          className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 rounded-md transition duration-200 cursor-pointer disabled:opacity-50"
+          disabled={loading}
+        >
+          {loading ? "Loading..." : "Login"}
+        </button>
+      </form>
+    </div>
+  );
 }

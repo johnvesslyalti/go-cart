@@ -1,18 +1,11 @@
 import { ReactNode, useEffect, useState } from "react";
 import { createContext } from "react";
-
-export interface User {
-    id: string;
-    name: string;
-    email: string;
-    password: string;
-    role: "user" | "admin" | string
-}
+import { User } from "../types/types";
 
 export interface AuthContextType {
     user: User | null;
     token: string | null;
-    login: (userDate: User, token: string) => void;
+    login: (userData: User, token: string) => void;
     logout: () => void;
 }
 

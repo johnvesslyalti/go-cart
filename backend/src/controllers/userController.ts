@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import User, { IUser } from "../models/User";
+import User from "../models/User";
 import { Types } from "mongoose";
 import jwt from 'jsonwebtoken';
 
@@ -10,8 +10,14 @@ const generateToken = (userId: string): string => {
     return jwt.sign({ id: userId}, secret, {expiresIn: '7d'});
 };
 
+interface IUser {
+    name: string;
+    email: string;
+    password: string;
+}
+
 export const register = async (req: Request, res: Response): Promise<void> => {
-    const { name, email, password, role } = req.body;
+    const { name, email, password } = req.body;
 
     try {
         const userExists = await User.findOne({ email });
@@ -24,8 +30,11 @@ export const register = async (req: Request, res: Response): Promise<void> => {
             name,
             email,
             password,
-            role
         }) as IUser;
+
+        res.status(201).json({
+            message: "Account created successfully"
+        });
 
     } catch(error: any) {
         res.status(500).json({ message: error.message });
