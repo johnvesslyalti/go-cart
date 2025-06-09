@@ -1,12 +1,23 @@
-import { useContext } from "react";
+import React, { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
-export default function Footer() {
-  const { user } = useContext(AuthContext);
+export interface IUser {
+    role: "user" | "admin" | string;
+}
+
+export interface IAuthContext {
+    user: IUser | null;
+}
+
+const Footer: React.FC = () => {
+  const { user } = useContext(AuthContext) as IAuthContext;
   const navigate = useNavigate();
 
-  const goto = (path) => navigate(path);
+  const goto = async (path: string): Promise<void> => {
+    await navigate(path); 
+};
+
 
     return (
       <footer className="bg-gray-800 text-white py-10 mt-10">
@@ -62,3 +73,4 @@ export default function Footer() {
     );
   }
   
+export default Footer;

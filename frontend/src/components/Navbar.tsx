@@ -1,13 +1,23 @@
 import { useContext, useState } from "react"
 import { Link } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext, User } from "../context/AuthContext";
 import Message from "./Message";
 import { CiDeliveryTruck, CiLogout, CiMenuBurger, CiShoppingCart } from "react-icons/ci";
 import { FaOpencart } from "react-icons/fa";
 import { RxCross1 } from "react-icons/rx";
 
-export default function Navbar({ search, onSearchChange}) {
-    const { user, logout } = useContext(AuthContext);
+interface NavbarProps {
+    search: string;
+    onSearchChange: (value: string) => void;
+}
+
+interface IAuthProps {
+    user: User | null;
+    logout: () => void;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ search, onSearchChange}) => {
+    const { user, logout } = useContext(AuthContext) as IAuthProps;
     const [showModal, setShowModal] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
 
@@ -76,3 +86,5 @@ export default function Navbar({ search, onSearchChange}) {
         </>
     )
 }
+
+export default Navbar;

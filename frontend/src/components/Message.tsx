@@ -1,9 +1,17 @@
-export default function Message({
+interface MessageProps {
+    showMessage: boolean;
+    setShowMessage: (value: boolean) => void;
+    message: string;
+    func: () => void;
+    btn: string;
+}
+
+const Message: React.FC<MessageProps> = ({
     showMessage,
     setShowMessage,
     message,
     func, 
-    btn }) {
+    btn }) => {
     return(
         <>
         {showMessage && (
@@ -20,3 +28,5 @@ export default function Message({
         </>
     )
 }
+
+export default Message;
