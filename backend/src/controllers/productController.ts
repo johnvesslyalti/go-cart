@@ -39,11 +39,21 @@ export const createProduct = async (req: Request<{}, {}, ProductBody >, res: Res
 
 export const getProducts = async (req: Request, res: Response): Promise<void> => {
     try {
-        const products: IProduct[] = await Product.find()
+        const page = parseInt(req.query.page as string) || 1;
+        const limit = parseInt(req.query.limit as string) || 10;
+        const skip = (page - 1) * limit;
+
+        const [products, total] = await Promise.all([
+            Product.find().skip(skip).limit(limit),
+            Product.countDocuments(),
+        ])
 
         res.json({
-            products,
-        });
+            currentPage: page,
+            totalPage: Math.ceil(total/limit),
+            totalProducts: total,
+            products
+        })
 
     } catch (error: any) {
         res.status(500).json({ message: error.message });

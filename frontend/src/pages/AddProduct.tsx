@@ -7,9 +7,9 @@ import { IoMdArrowRoundBack } from "react-icons/io";
 const AddProduct: React.FC = () => {
     const [name, setName] = useState<string>("");
     const [description, setDescription] = useState<string>("");
-    const [price, setPrice] = useState<number>(0);
+    const [price, setPrice] = useState<string>("");
     const [category, setCategory] = useState<string>("");
-    const [stock, setStock] = useState<number>(0);
+    const [stock, setStock] = useState<string>("");
     const [imgURL, setImgURL] = useState<string>("");
     const [success, setSuccess] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
@@ -35,9 +35,9 @@ const AddProduct: React.FC = () => {
             setSuccess(true);
             setName("");
             setDescription("");
-            setPrice(0);
+            setPrice("");
             setCategory("");
-            setStock(0);
+            setStock("");
             setImgURL("");
         } catch (err) {
             console.error(err);
@@ -91,7 +91,7 @@ const AddProduct: React.FC = () => {
                     [&::-webkit-inner-spin-button]:appearance-none
                     px-4 py-2 rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400"
                     value={price}
-                    onChange={(e) => setPrice(Number(e.target.value))}
+                    onChange={(e) => setPrice(e.target.value)}
                 />
 
                 <input
@@ -110,7 +110,7 @@ const AddProduct: React.FC = () => {
                     [&::-webkit-inner-spin-button]:appearance-none
                     px-4 py-2 rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400"
                     value={stock}
-                    onChange={(e) => setStock(Number(e.target.value))}
+                    onChange={(e) => setStock(e.target.value)}
                 />
 
                 <input

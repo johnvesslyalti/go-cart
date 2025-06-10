@@ -31,7 +31,6 @@ const productSchema: Schema<IProduct> = new Schema<IProduct>({
     },
     stock: {
         type: Number,
-        default: 0,
         min: 0,
     },
     image: {
