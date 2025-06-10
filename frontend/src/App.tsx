@@ -3,7 +3,7 @@ import { useContext } from "react";
 import Home from "./pages/Home";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
-import AuthProvider, { AuthContext, User } from "./context/AuthContext";
+import AuthProvider, { AuthContext } from "./context/AuthContext";
 import Product from "./pages/Product";
 import AddProduct from "./pages/AddProduct";
 import AdminRoute from "./routes/AdminRoute";
@@ -12,6 +12,7 @@ import Users from "./pages/Users";
 import UserRoute from "./routes/UserRoute";
 import Cart from "./pages/Cart";
 import EditProduct from "./pages/EditProduct";
+import { User } from "./types/types";
 
 function AppRoutes() {
     const { user } = useContext(AuthContext) as {user: User}; // ✅ Now this is inside AuthProvider

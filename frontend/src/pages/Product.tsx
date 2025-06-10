@@ -2,7 +2,8 @@ import { useState, useEffect, useContext } from "react";
 import api from "../utils/api";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { IoMdArrowRoundBack } from "react-icons/io";
-import { AuthContext, User } from "../context/AuthContext";
+import { AuthContext } from "../context/AuthContext";
+import { User } from "@/types/types";
 
 interface IProduct {
     name: string;

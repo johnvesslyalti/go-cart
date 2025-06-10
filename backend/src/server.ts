@@ -12,7 +12,7 @@ connectDB()
 const app: Express = express();
 
 const allowedOrigins = [
-    'https://go-cart-rust.vercel.app',
+    'https://go-cart-xbbj.onrender.com',
     'http://localhost:5173'  // Ensure no trailing slash
 ];
 

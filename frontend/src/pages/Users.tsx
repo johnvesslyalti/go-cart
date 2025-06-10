@@ -1,8 +1,9 @@
 import { useContext, useEffect, useState } from "react"
 import api from "../utils/api";
-import { AuthContext, User } from "../context/AuthContext";
+import { AuthContext } from "../context/AuthContext";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
+import { User } from "@/types/types";
 
 export default function Users() {
     const [users, setUsers] = useState<User[]>([]);

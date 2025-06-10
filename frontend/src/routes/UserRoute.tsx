@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
-import { User } from "../context/AuthContext";
 import { ReactNode } from "react";
+import { User } from "@/types/types";
 
 interface UserProps {
     children: ReactNode;
