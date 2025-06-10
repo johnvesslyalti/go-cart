@@ -80,7 +80,6 @@ Folder Structure:
     |-  README.nd
 
     backend:
-        |- dist/
         |- src/
             |-  config/
                 |-  db.ts
@@ -98,10 +97,40 @@ Folder Structure:
                 |-  cartRoutes.ts
                 |-  productRoutes.ts
                 |-  userRoutes.ts
-        |-  .env
         |-  index.ts
 
     frontend:
+        |- public/
+        |- src/
+            |- components/
+                |- Back.tsx
+                |- Footer.tsx
+                |- Message.tsx
+                |- Navbar.tsx
+                |- Successful.tsx
+            |- context/
+                AuthContext.tsx
+            |- pages/
+                |- AddProduct.tsx
+                |- Cart.tsx
+                |- EditProduct.tsx
+                |- Home.tsx
+                |- Login.tsx
+                |- Product.tsx
+                |- Register.tsx
+                |- Users.tsx
+            |- routes/
+                |- AdminRoute.tsx
+                |- UserRoute.tsx
+            |- types/
+                |- types.d.ts
+            |- utils/
+                |- api.ts
+            |- App.css
+            |- App.tsx
+            |- index.css
+            |- main.tsx
+
 
 Info:
 
