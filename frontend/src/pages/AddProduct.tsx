@@ -39,6 +39,9 @@ const AddProduct: React.FC = () => {
             setCategory("");
             setStock("");
             setImgURL("");
+            setTimeout(() => {
+                setSuccess(false);
+            }, 1500)
         } catch (err) {
             console.error(err);
             setError("Failed to add product. Please try again.");
@@ -50,7 +53,7 @@ const AddProduct: React.FC = () => {
     return (
         <div className="min-h-screen flex justify-center items-center bg-gray-900 text-white p-10">
             {success && (
-                <div className="absolute top-10 bg-green-500 px-4 py-3 rounded shadow-lg">
+                <div className="absolute top-10 bg-green-500 px-4 py-3 rounded shadow-lg animate-bounce">
                     Product added successfully!
                 </div>
             )}

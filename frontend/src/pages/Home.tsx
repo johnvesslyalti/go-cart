@@ -181,7 +181,7 @@ export default function Home() {
           <button
             onClick={handleLoadMore}
             disabled={isLoading}
-            className="bg-green-500 px-4 py-2 rounded-lg text-white"
+            className="bg-green-500 px-4 py-2 rounded-lg text-white cursor-pointer"
           >
             {isLoading ? "Loading..." : "Load More"}
           </button>

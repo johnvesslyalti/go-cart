@@ -31,7 +31,7 @@ const Navbar: React.FC<NavbarProps> = ({ search, onSearchChange}) => {
         <>
             <div className="flex justify-between items-center">
                 {user?.role === 'admin' ? (
-                    <h1 className="text-3xl font-bold pl-10 text-green-500">Admin</h1>
+                    <h1 className="text-3xl font-bold px-3 text-green-500">Admin</h1>
                 ) : (
                     <Link to="/"><h1 className="flex items-center justify-center gap-5 text-3xl font-bold text-green-500"><p>Go Cart</p><FaOpencart className="text-5xl" /></h1></Link>
                 )}
