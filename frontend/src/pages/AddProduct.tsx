@@ -5,135 +5,161 @@ import { AuthContext } from "../context/AuthContext";
 import { IoMdArrowRoundBack } from "react-icons/io";
 
 const AddProduct: React.FC = () => {
-    const [name, setName] = useState<string>("");
-    const [description, setDescription] = useState<string>("");
-    const [price, setPrice] = useState<string>("");
-    const [category, setCategory] = useState<string>("");
-    const [stock, setStock] = useState<string>("");
-    const [imgURL, setImgURL] = useState<string>("");
-    const [success, setSuccess] = useState<boolean>(false);
-    const [error, setError] = useState<string | null>(null);
-    const [loading, setLoading] = useState<boolean>(false);
+  const [name, setName] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [price, setPrice] = useState<string>("");
+  const [category, setCategory] = useState<string>("");
+  const [stock, setStock] = useState<string>("");
+  // const [imgURL, setImgURL] = useState<string>("");
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [success, setSuccess] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
-    const { token } = useContext(AuthContext) as {token: string};
-    const navigate = useNavigate();
+  const { token } = useContext(AuthContext) as { token: string };
+  const navigate = useNavigate();
 
-    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        setLoading(true);
-        setError(null);
-        try {
-            await api.post(
-                "/products/",
-                { name, description, price, category, stock, image: imgURL },
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
-            setSuccess(true);
-            setName("");
-            setDescription("");
-            setPrice("");
-            setCategory("");
-            setStock("");
-            setImgURL("");
-            setTimeout(() => {
-                setSuccess(false);
-            }, 1500)
-        } catch (err) {
-            console.error(err);
-            setError("Failed to add product. Please try again.");
-        } finally {
-            setLoading(false);
-        }
-    };
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
 
-    return (
-        <div className="min-h-screen flex justify-center items-center bg-gray-900 text-white p-10">
-            {success && (
-                <div className="absolute top-10 bg-green-500 px-4 py-3 rounded shadow-lg animate-bounce">
-                    Product added successfully!
-                </div>
-            )}
-            {error && (
-                <div className="absolute top-10 bg-red-500 px-4 py-3 rounded animate-bounce shadow-lg">
-                    {error}
-                </div>
-            )}
-            <div onClick={() => navigate("/")} className="absolute flex justify-center items-center cursor-pointer group gap-2 text-lg top-5 left-5">
-                <IoMdArrowRoundBack className="group-hover:text-green-500" />
-                <p className="group-hover:text-green-500">Back</p>
-            </div>
-            <form onSubmit={handleSubmit} className="w-full max-w-md flex flex-col gap-5 p-6 bg-gray-800 rounded-xl shadow-xl">
-                <h1 className="text-3xl text-green-400 font-bold text-center">Add Product</h1>
+    try {
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("description", description);
+      formData.append("price", price);
+      formData.append("category", category);
+      formData.append("stock", stock);
+      if (imageFile) {
+        formData.append("image", imageFile);
+      }
 
-                <input
-                    type="text"
-                    placeholder="Product Name"
-                    className="px-4 py-2 rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                />
+      await api.post("/products", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data", // 👈 important!
+        },
+      });
 
-                <textarea
-                    placeholder="Product Description"
-                    className="px-4 py-2 rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400 resize-none"
-                    rows={3}
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                ></textarea>
+      setSuccess(true);
+      setName("");
+      setDescription("");
+      setPrice("");
+      setCategory("");
+      setStock("");
+      setImageFile(null);
+      setTimeout(() => setSuccess(false), 1500);
+    } catch (error) {
+      console.error(error);
+      setError("Failed to add Product. please try again");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-                <input
-                    type="number"
-                    placeholder="Price"
-                    className="
+  return (
+    <div className="min-h-screen flex justify-center items-center bg-gray-900 text-white p-10">
+      {success && (
+        <div className="absolute top-10 bg-green-500 px-4 py-3 rounded shadow-lg animate-bounce">
+          Product added successfully!
+        </div>
+      )}
+      {error && (
+        <div className="absolute top-10 bg-red-500 px-4 py-3 rounded animate-bounce shadow-lg">
+          {error}
+        </div>
+      )}
+      <div
+        onClick={() => navigate("/")}
+        className="absolute flex justify-center items-center cursor-pointer group gap-2 text-lg top-5 left-5"
+      >
+        <IoMdArrowRoundBack className="group-hover:text-green-500" />
+        <p className="group-hover:text-green-500">Back</p>
+      </div>
+      <form
+        onSubmit={handleSubmit}
+        className="w-full max-w-md flex flex-col gap-5 p-6 bg-gray-800 rounded-xl shadow-xl"
+      >
+        <h1 className="text-3xl text-green-400 font-bold text-center">
+          Add Product
+        </h1>
+
+        <input
+          type="text"
+          placeholder="Product Name"
+          className="px-4 py-2 rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+
+        <textarea
+          placeholder="Product Description"
+          className="px-4 py-2 rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400 resize-none"
+          rows={3}
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        ></textarea>
+
+        <input
+          type="number"
+          placeholder="Price"
+          className="
                     appearance-none
                     [&::-webkit-outer-spin-button]:appearance-none 
                     [&::-webkit-inner-spin-button]:appearance-none
                     px-4 py-2 rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400"
-                    value={price}
-                    onChange={(e) => setPrice(e.target.value)}
-                />
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
+        />
 
-                <input
-                    type="text"
-                    placeholder="Category"
-                    className="px-4 py-2 rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400"
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
-                />
+        <input
+          type="text"
+          placeholder="Category"
+          className="px-4 py-2 rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+        />
 
-                <input
-                    type="number"
-                    placeholder="Stock"
-                    className="appearance-none
+        <input
+          type="number"
+          placeholder="Stock"
+          className="appearance-none
                     [&::-webkit-outer-spin-button]:appearance-none 
                     [&::-webkit-inner-spin-button]:appearance-none
                     px-4 py-2 rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400"
-                    value={stock}
-                    onChange={(e) => setStock(e.target.value)}
-                />
+          value={stock}
+          onChange={(e) => setStock(e.target.value)}
+        />
 
-                <input
+        {/* <input
                     type="text"
                     placeholder="Image URL"
                     className="px-4 py-2 rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400"
                     value={imgURL}
                     onChange={(e) => setImgURL(e.target.value)}
-                />
+                /> */}
 
-                <button
-                    type="submit"
-                    className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 rounded-md transition duration-200 cursor-pointer"
-                    disabled={loading}
-                >
-                    {loading ? "Adding..." : "Add Product"}
-                </button>
-            </form>
-        </div>
-    );
-}
+        <label className="cursor-pointer bg-gray-700 text-white px-4 py-2 rounded-md text-center hover:bg-gray-600 transition">
+          Choose Product Image
+          <input
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={(e) => setImageFile(e.target.files?.[0] || null)}
+          />
+        </label>
+
+        <button
+          type="submit"
+          className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 rounded-md transition duration-200 cursor-pointer"
+          disabled={loading}
+        >
+          {loading ? "Adding..." : "Add Product"}
+        </button>
+      </form>
+    </div>
+  );
+};
 
 export default AddProduct;
