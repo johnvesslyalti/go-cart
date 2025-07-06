@@ -106,7 +106,7 @@ export default function Home() {
   };
 
   return (
-        <div className="p-5">
+        <div className="min-h-screen p-5">
             <Navbar search={search} onSearchChange={setSearch} />
             <Message
                 showMessage={cartMessage}
