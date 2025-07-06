@@ -35,6 +35,7 @@ const productSchema: Schema<IProduct> = new Schema<IProduct>({
     },
     image: {
         type: String,
+        required: true,
     },
     createdAt: {
         type: Date,

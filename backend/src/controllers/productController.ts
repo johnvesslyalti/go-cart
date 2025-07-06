@@ -10,32 +10,42 @@ interface ProductBody {
     image: string;
 }
 
-export const createProduct = async (req: Request<{}, {}, ProductBody >, res: Response): Promise<void> => {
-    const {
-        name,
-        description,
-        price,
-        category,
-        stock,
-        image,
-    } = req.body;
-
-    try{
-        const product = await Product.create({
-          name,
-          description,
-          price,
-          category,
-          stock,
-          image  
-        });
-
-        res.status(201).json(product);
-
-    } catch (error: any) {
-        res.status(500).json({ message: error.message });
-    }
+interface ProductBody {
+  name: string;
+  description: string;
+  price: number;
+  category: string;
+  stock: number;
 }
+
+export const createProduct = async (
+  req: Request<{}, {}, ProductBody> & { file?: Express.Multer.File },
+  res: Response
+): Promise<void> => {
+  try {
+    const { name, description, price, category, stock } = req.body;
+    const image = req.file?.path; // Cloudinary URL
+
+    if (!image) {
+      res.status(400).json({ message: "Image upload failed" });
+      return;
+    }
+
+    const product = await Product.create({
+      name,
+      description,
+      price,
+      category,
+      stock,
+      image,
+    });
+
+    res.status(201).json(product);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 
 export const getProducts = async (req: Request, res: Response): Promise<void> => {
     try {
