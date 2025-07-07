@@ -38,7 +38,7 @@ const AddProduct: React.FC = () => {
       await api.post("/products", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data", // 👈 important!
+          "Content-Type": "multipart/form-data",
         },
       });
 
