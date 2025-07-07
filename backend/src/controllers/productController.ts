@@ -38,8 +38,12 @@ export const createProduct = async (
     // Upload image to Cloudinary
     const result = await cloudinary.uploader.upload(localPath);
 
-    // Delete local file
-    fs.unlinkSync(localPath);
+    // Safe local cleanup
+    try {
+      fs.unlinkSync(localPath);
+    } catch {
+      console.warn("Local file not found to delete:", localPath);
+    }
 
     const product = await Product.create({
       name,
