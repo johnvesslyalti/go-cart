@@ -38,14 +38,12 @@ export default function Home() {
   useEffect(() => {
     const fetchProducts = async () => {
       if (!hasMore) return;
-
       setIsLoading(true);
 
       try {
         const response = await api.get<ProductResponse>(`products?page=${page}&limit=${limit}`);
         const { products: newProducts, totalPage } = response.data;
 
-        // Remove duplicates by _id
         setProducts(prev => {
           const existingIds = new Set(prev.map(p => p._id));
           const uniqueProducts = newProducts.filter(p => !existingIds.has(p._id));
@@ -67,7 +65,7 @@ export default function Home() {
 
   const handleLoadMore = () => {
     if (!isLoading && hasMore) {
-      setPage(prevPage => prevPage + 1);
+      setPage(prev => prev + 1);
     }
   };
 
@@ -95,99 +93,100 @@ export default function Home() {
   const deleteProduct = async (id: string) => {
     try {
       await api.delete(`/products/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
-      setProducts(prev => prev.filter(product => product._id !== id));
+      setProducts(prev => prev.filter(p => p._id !== id));
     } catch (error) {
       console.log(error);
     }
   };
 
   return (
-        <div className="min-h-screen p-5">
-            <Navbar search={search} onSearchChange={setSearch} />
-            <Message
-                showMessage={cartMessage}
-                setShowMessage={setCartMessage}
-                message={"Please login to add items to cart!"}
-                func={() => navigate('/login')}
-                btn={"Login"}
-            />
-            { isLoading && (
-                <div className="w-5 h-5 border-4 border-dashed border-gray-700 rounded-full animate-spin"></div>
-            )}
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-5 py-10">
-                {filteredProducts.length === 0 && !isLoading ? (
-                    <p className="col-span-full text-center text-white text-lg">No products found.</p>
-                ) : (
-                filteredProducts.map(product => (
-                    <div
-                        key={product._id}
-                        className="p-5 bg-gray-700 rounded-2xl flex flex-col justify-between h-[400px] hover:scale-101"
-                    >
-                    {/* Product card as before */}
-                    <Link to={`/${product._id}`} className="flex-grow">
-                    <div className="h-48 overflow-hidden rounded-xl">
-                        <img
-                            src={product.image}
-                            alt={product.name}
-                            className="w-full h-full object-contain"
-                        />
-                    </div>
-                    <div className="mt-5 flex flex-col flex-grow">
-                        <p className="font-bold text-xl line-clamp-2 break-words">
-                            {product.name}
-                        </p>
-                        <p className="text-green-200 mt-1">₹{product.price}</p>
-                    </div>
-                    </Link>
+    <div className="min-h-screen bg-[#0f172a] text-white px-4 md:px-10 py-6">
+      <Navbar search={search} onSearchChange={setSearch} />
+      <Message
+        showMessage={cartMessage}
+        setShowMessage={setCartMessage}
+        message="Please login to add items to cart!"
+        func={() => navigate('/login')}
+        btn="Login"
+      />
 
-                    {user?.role === "user" || !user ? (
-                    <div className="flex justify-center items-center gap-2 mt-3 w-full">
-                        <button
-                            onClick={() => addToCart(product)}
-                            className="bg-green-500 px-3 py-2 rounded-xl text-[10px] md:text-sm cursor-pointer"
-                            >
-                            Add to cart
-                        </button>
-                        <button className="bg-green-600 px-3 py-2 rounded-xl text-[10px] md:text-sm cursor-pointer">
-                            Buy now
-                        </button>
-                    </div>
-                    ) : user?.role === "admin" ? (
-                    <div className="flex justify-center items-center gap-2 mt-3">
-                    <Link to={`/edit/${product._id}`} className="bg-green-700 w-full px-3 py-2 rounded-xl text-sm">
-                        <button className="cursor-pointer">
-                            Edit Product
-                        </button>
-                    </Link>
-                        <button
-                        className="bg-red-700 w-full px-3 py-2 rounded-xl text-sm cursor-pointer"
-                        onClick={() => deleteProduct(product._id)}
-                        >
-                            Delete Product
-                        </button>
-                    </div>
-                ) : null}
-                </div>
-                ))
-                )}
-            </div>
-
-
-            <div className="flex justify-center items-center mt-4">
-            {hasMore && (
-                <button
-                    onClick={handleLoadMore}
-                    disabled={isLoading}
-                    className="bg-green-500 px-4 py-2 rounded-lg text-white cursor-pointer"
-                >
-                    {isLoading ? "Loading..." : "Load More"}
-                </button>
-            )}
-            </div>
+      {isLoading && (
+        <div className="flex justify-center py-8">
+          <div className="w-8 h-8 border-4 border-t-green-400 border-gray-600 rounded-full animate-spin" />
         </div>
+      )}
+
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 py-8">
+        {filteredProducts.length === 0 && !isLoading ? (
+          <p className="col-span-full text-center text-gray-300 text-lg">No products found.</p>
+        ) : (
+          filteredProducts.map(product => (
+            <div
+              key={product._id}
+              className="bg-gray-800 hover:shadow-lg transition-all p-4 rounded-2xl flex flex-col justify-between h-[420px] hover:scale-[1.02]"
+            >
+              <div className="flex flex-col h-full justify-between">
+                <Link to={`/${product._id}`}>
+                  <div className="h-44 overflow-hidden rounded-xl bg-white p-2">
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+                  <div className="mt-3">
+                    <h2 className="font-semibold text-lg line-clamp-2">{product.name}</h2>
+                    <p className="text-green-400 mt-1 font-medium">₹{product.price}</p>
+                  </div>
+                </Link>
+
+                {user?.role === "user" || !user ? (
+                  <div className="flex justify-between gap-2 mt-2">
+                    <button
+                      onClick={() => addToCart(product)}
+                      className="flex-1 bg-green-500 hover:bg-green-600 transition-colors px-3 py-2 rounded-xl text-xs md:text-sm"
+                    >
+                      Add to cart
+                    </button>
+                    <button className="flex-1 bg-green-600 hover:bg-green-700 transition-colors px-3 py-2 rounded-xl text-xs md:text-sm">
+                      Buy now
+                    </button>
+                  </div>
+                ) : user?.role === "admin" ? (
+                  <div className="flex justify-between gap-2 mt-2">
+                    <Link
+                      to={`/edit/${product._id}`}
+                      className="flex-1 bg-blue-600 hover:bg-blue-700 px-3 py-2 rounded-xl text-xs text-center"
+                    >
+                      Edit
+                    </Link>
+                    <button
+                      onClick={() => deleteProduct(product._id)}
+                      className="flex-1 bg-red-600 hover:bg-red-700 px-3 py-2 rounded-xl text-xs"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                ) : null}
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+
+      <div className="flex justify-center mt-6">
+        {hasMore && (
+          <button
+            onClick={handleLoadMore}
+            disabled={isLoading}
+            className="bg-green-500 hover:bg-green-600 px-6 py-2 rounded-xl transition-colors disabled:opacity-50"
+          >
+            {isLoading ? "Loading..." : "Load More"}
+          </button>
+        )}
+      </div>
+    </div>
   );
 }
