@@ -5,6 +5,7 @@ import { AuthContext } from "../context/AuthContext";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { LoginResponse } from "../types/types";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
+import { MdGppGood } from "react-icons/md";
 
 export default function Login(): JSX.Element {
   const [email, setEmail] = useState<string>("");
@@ -64,8 +65,8 @@ export default function Login(): JSX.Element {
   return (
     <div className="h-screen flex justify-center items-center bg-gray-900 text-white px-4 relative">
       {success && (
-        <div className="absolute top-10 bg-green-500 px-2 py-3 rounded animate-bounce">
-          Login successful
+        <div className="absolute flex items-center justify-center gap-2 top-10 bg-green-500 px-2 py-3 rounded">
+          <span><MdGppGood /></span><p>Login successful</p>
         </div>
       )}
       {error && (

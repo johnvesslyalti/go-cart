@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { FaRegEye } from "react-icons/fa";
 import { FaRegEyeSlash } from "react-icons/fa";
+import { MdGppGood } from "react-icons/md";
 
 export default function Register() {
   const [name, setName] = useState<string>("");
@@ -38,7 +39,8 @@ export default function Register() {
       console.error(error);
       // Show a friendly error message
       setError(
-        error.response?.data?.message || "Registration failed. Please try again."
+        error.response?.data?.message ||
+          "Registration failed. Please try again."
       );
     }
   };
@@ -46,9 +48,12 @@ export default function Register() {
   return (
     <div className="h-screen flex justify-center items-center bg-gray-900 text-white px-4">
       {success && (
-        <button className="absolute top-10 bg-green-500 px-2 py-3 animate-bounce">
-          Registration Successful
-        </button>
+        <div className="absolute flex items-center justify-center gap-2 top-10 bg-green-500 px-2 py-3 rounded">
+          <span>
+            <MdGppGood />
+          </span>
+          <p>Login successful</p>
+        </div>
       )}
 
       {error && (
@@ -69,7 +74,9 @@ export default function Register() {
         onSubmit={handleSubmit}
         className="w-full max-w-sm flex flex-col gap-5 p-6 bg-gray-800 rounded-xl shadow-xl"
       >
-        <h1 className="text-3xl text-green-400 font-bold text-center">Register</h1>
+        <h1 className="text-3xl text-green-400 font-bold text-center">
+          Register
+        </h1>
 
         <input
           type="text"
